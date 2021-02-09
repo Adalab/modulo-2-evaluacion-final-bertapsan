@@ -22,7 +22,8 @@ function callToApi() {
 function paintResultSearch(resultSearch) {
   let htmlCode = '';
   for (const film of resultSearch) {
-    htmlCode += '<li class="js-films">';
+    console.log(film.show.id);
+    htmlCode += `<li class="js-films" id="${film.show.id}">`;
     htmlCode += `<p>Serie: ${film.show.name}</p>`; //el name no está en la raiz por eso show.name
     if (film.show.image === null) {
       // condicional para cuando no tengamos imagen asociada, si es null me muestras imagen dummy
@@ -47,8 +48,8 @@ function listenFilmEvents() {
   }
 }
 
-function handleFilm() {
-  /* console.log('me han clicado'); */
+function handleFilm(ev) {
+  console.log('me han clicado', ev);
 }
 
 //***** search
