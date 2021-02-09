@@ -21,6 +21,11 @@
   display: flex;
   flex-direction: row;
 }
+
+.js-shows {
+  list-style: none;
+}
+
 /* borders & background-color for further playing purposes */
 
 

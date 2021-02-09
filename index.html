@@ -13,16 +13,18 @@
   <body>
     <main class="main">
       <h1>Buscador de series</h1>
-      <form>
-        <input class="js-search" type="text" id="" name="search" value=""
-      placeholder="¿Qué película buscas?" required />
-      <input class="form__button" type="submit" value="Buscar" />
+      <form class="js-form">
+        <input type="text" class="js-form__input" name="search" value=""/>
+        <!--required como opción a que no puedan ponerlo en blanco-->
+        <button type="submit" class="js-form__button">
+          Buscar
+        </button>
       </form>
       <div class="container">
         <section class="js-favorites">Mis favoritas</section>
-        <section>Resultados
-          <ul class="js-shows"> <img src=""/>
-            <li></li>
+        <section>
+          Resultados
+          <ul class="js-shows">
           </ul>
         </section>
       </div>
