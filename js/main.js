@@ -484,7 +484,7 @@ function paintResultSearch(resultSearch) {
 
 let htmlFavoritesCode = '';
 for (const favorite of favorites) {
-  htmlFavoritesCode += `<li class="js-films" id="${favorite.show.id}">`;
+  htmlFavoritesCode += `<li class="js-filmsfab" id="${favorite.show.id}">`;  // el id tiene una clase distinta al de search pq si no se marca al clicarlo
   htmlFavoritesCode += `<p>Serie: ${favorite.show.name}</p>`;
   if (favorite.show.image === null) {
     htmlFavoritesCode += '<p><img src="https://via.placeholder.com/210x295/ffffff/666666/?"/>';

@@ -29,9 +29,13 @@
 .js-favorites {
   list-style: none;
 }
+
+.js-films {
+  width: 300px;
+}
 .js-fabMark {
-border-color: aquamarine;
-border: solid 2px;
+background-color: black;
+color: white;
 }
 
 /* borders & background-color for further playing purposes */
