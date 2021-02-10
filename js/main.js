@@ -518,14 +518,11 @@ function listenFilmEvents() {
 }
 
 //**** add/remove to favArray
-// IndexOf() para buscar el elemnto dentro de la fav (array de favorites)
+// FindIndex() para buscar el elemnto dentro de la fav (array de favorites)
 //let fav = [];
-//const indexOf(iD) = fav.indexOf('id');
-//if indexOf(ID) ===-1
-
-// If -1 --> push en favArray
-//let fav= [];
-//const newLength = arr.push('id');
+//
+//if findIndex(ID) ===-1  ---> push en favArray
+//
 //else ---> splice() indicando posición devuelta por IndexOf, y borrar 1 elemento
 
 
