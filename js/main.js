@@ -444,7 +444,7 @@ const favorites = [
     },
   },
 ];
- 
+ let fav =[]; // variable para recopilar las favorites
 
 
 //***** api
@@ -498,19 +498,16 @@ favoritesElement.innerHTML = htmlFavoritesCode;
 
 
 
-//***** listen film events
+//***** listen film events + add/remove class
 
 function handleFilm(ev) {
   if (ev.currentTarget.classList.contains('js-fabMark')) { 
-    //elimina la clase
     ev.currentTarget.classList.remove('js-fabMark');
   }
     else {
-    // añade la clase
     ev.currentTarget.classList.add('js-fabMark');
     }
   }
- 
 
 function listenFilmEvents() {
   //listen films click (se hace "dentro del pintado" pq la ejecutamos tras el mismo)
@@ -520,7 +517,16 @@ function listenFilmEvents() {
   }
 }
 
+//**** add/remove to favArray
+// IndexOf() para buscar el elemnto dentro de la fav (array de favorites)
+//let fav = [];
+//const indexOf(iD) = fav.indexOf('id');
+//if indexOf(ID) ===-1
 
+// If -1 --> push en favArray
+//let fav= [];
+//const newLength = arr.push('id');
+//else ---> splice() indicando posición devuelta por IndexOf, y borrar 1 elemento
 
 
 //***** search
@@ -537,3 +543,6 @@ function handleForm(ev) {
   ev.preventDefault();
 }
 formElement.addEventListener('submit', handleForm);
+
+
+
