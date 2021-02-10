@@ -1,12 +1,4 @@
-'use strict';
-
-const showsElement = document.querySelector('.js-shows'); // mostrar los resultados de la búsqueda
-const searchElement = document.querySelector('.js-form__input'); // recoger el texto que teclea la usuaria
-const formButtonElement = document.querySelector('.js-form__button'); // llamarla en el listner de la búsqueda
-const formElement = document.querySelector('.js-form'); // creo para generar preventDefault (envío de form)
-const favoritesElement = document.querySelector('.js-favorites'); // mostrar los resultados de favorites
-// favorites es una fake array temporal
-const favorites = [
+[
   {
     score: 17.82129,
     show: {
@@ -443,97 +435,114 @@ const favorites = [
       },
     },
   },
+  {
+    score: 12.692548,
+    show: {
+      id: 1955,
+      url: 'http://www.tvmaze.com/shows/1955/the-powerpuff-girls',
+      name: 'The Powerpuff Girls',
+      type: 'Animation',
+      language: 'English',
+      genres: ['Action', 'Children', 'Crime'],
+      status: 'Ended',
+      runtime: 30,
+      premiered: '1998-11-18',
+      officialSite: null,
+      schedule: {
+        time: '',
+        days: ['Friday'],
+      },
+      rating: {
+        average: 8.3,
+      },
+      weight: 9,
+      network: {
+        id: 11,
+        name: 'Cartoon Network',
+        country: {
+          name: 'United States',
+          code: 'US',
+          timezone: 'America/New_York',
+        },
+      },
+      webChannel: null,
+      externals: {
+        tvrage: 6102,
+        thetvdb: 76200,
+        imdb: 'tt0175058',
+      },
+      image: {
+        medium:
+          'http://static.tvmaze.com/uploads/images/medium_portrait/11/27896.jpg',
+        original:
+          'http://static.tvmaze.com/uploads/images/original_untouched/11/27896.jpg',
+      },
+      summary:
+        '<p><b>The Powerpuff Girls</b> is an award-winning animated action series about three super-powered little girls Bubbles, Blossom and Buttercup with one very big mission: saving the world before bedtime.</p>',
+      updated: 1592706624,
+      _links: {
+        self: {
+          href: 'http://api.tvmaze.com/shows/1955',
+        },
+        previousepisode: {
+          href: 'http://api.tvmaze.com/episodes/160239',
+        },
+      },
+    },
+  },
+  {
+    score: 12.535534,
+    show: {
+      id: 1073,
+      url: 'http://www.tvmaze.com/shows/1073/bomb-girls',
+      name: 'Bomb Girls',
+      type: 'Scripted',
+      language: 'English',
+      genres: ['Drama', 'Romance', 'War'],
+      status: 'Ended',
+      runtime: 60,
+      premiered: '2012-01-04',
+      officialSite: null,
+      schedule: {
+        time: '20:00',
+        days: ['Monday'],
+      },
+      rating: {
+        average: 8.7,
+      },
+      weight: 0,
+      network: {
+        id: 67,
+        name: 'Global',
+        country: {
+          name: 'Canada',
+          code: 'CA',
+          timezone: 'America/Halifax',
+        },
+      },
+      webChannel: null,
+      externals: {
+        tvrage: 30600,
+        thetvdb: 254378,
+        imdb: 'tt1955311',
+      },
+      image: {
+        medium:
+          'http://static.tvmaze.com/uploads/images/medium_portrait/7/17549.jpg',
+        original:
+          'http://static.tvmaze.com/uploads/images/original_untouched/7/17549.jpg',
+      },
+      summary:
+        '<p>Set in the 1940s, <b>Bomb Girls</b> tells the remarkable stories of the women who risked their lives in a munitions factory building bombs for the Allied forces fighting on the European front. The series delves into the lives of these exceptional women – peers, friends and rivals – who find themselves thrust into new worlds and changed profoundly as they are liberated from their home and social restrictions.</p>',
+      updated: 1592496010,
+      _links: {
+        self: {
+          href: 'http://api.tvmaze.com/shows/1073',
+        },
+        previousepisode: {
+          href: 'http://api.tvmaze.com/episodes/108024',
+        },
+      },
+    },
+  },
 ];
- 
-
-
-//***** api
-
-function callToApi() {
-  // Genero una función para llamar a la api, facilitar el search
-  fetch('//api.tvmaze.com/search/shows?q=' + searchElement.value) // a la url de la api le he añadido un value para generar la búsqueda
-    .then((response) => response.json())
-    .then((data) => {
-      paintResultSearch(data);
-    });
-}
-
-//***** paint search
-
-function paintResultSearch(resultSearch) {
-  let htmlCode = '';
-  for (const film of resultSearch) {
-    /* console.log(film.show.id); */
-    htmlCode += `<li class="js-films" id="${film.show.id}">`;   //incorporo el id para poder trabajar la parte de favoritos
-    htmlCode += `<p>Serie: ${film.show.name}</p>`;              //el name no está en la raiz por eso show.name
-    if (film.show.image === null) {
-      // condicional para cuando no tengamos imagen asociada, si es null me muestras imagen dummy
-      htmlCode +=
-        '<p> <img src="https://via.placeholder.com/210x295/ffffff/666666/?"/>';
-    } else {
-      htmlCode += `<p><img src="${film.show.image.medium}"/></p>`; //la imagen no está en la raiz y además API ofrece varios formatos, selecciono medium para uniformizar
-    }
-    htmlCode += '</li>';
-  }
-  showsElement.innerHTML = htmlCode;
-  listenFilmEvents(); //para limpiar/organizar saco la función que escucha el click sobre las películas y la pongo en //listen film events, y aquí solo la llamo
-}
-
-
-//**** paint favorites // este apartado se nutre de una "fake" array
-
-let htmlFavoritesCode = '';
-for (const favorite of favorites) {
-  htmlFavoritesCode += `<li class="js-films" id="${favorite.show.id}">`;
-  htmlFavoritesCode += `<p>Serie: ${favorite.show.name}</p>`;
-  if (favorite.show.image === null) {
-    htmlFavoritesCode += '<p><img src="https://via.placeholder.com/210x295/ffffff/666666/?"/>';
-  } else {
-    htmlFavoritesCode += `<p><img src="${favorite.show.image.medium}"/></p>`;
-  }
-  htmlFavoritesCode += `</li>`;
-}
-favoritesElement.innerHTML = htmlFavoritesCode;
-
-
-
-
-//***** listen film events
-
-function handleFilm(ev) {
-  if (ev.currentTarget.classList.contains('js-fabMark')) { 
-    //elimina la clase
-    ev.currentTarget.classList.remove('js-fabMark');
-  }
-    else {
-    // añade la clase
-    ev.currentTarget.classList.add('js-fabMark');
-    }
-  }
- 
-
-function listenFilmEvents() {
-  //listen films click (se hace "dentro del pintado" pq la ejecutamos tras el mismo)
-  const filmsElement = document.querySelectorAll('.js-films');
-  for (const filmElement of filmsElement) {
-    filmElement.addEventListener('click', handleFilm);
-  }
-}
-
-
-
-
-//***** search
-
-function handleSearch() {
-  /* console.log('hola', searchElement.value); */
-  callToApi();
-}
-formButtonElement.addEventListener('click', handleSearch); // el listner lo pongo sobre el botón de búsqueda
-
-//***** submit form - prevent
-function handleForm(ev) {
-  // ojo el prevent se hace sobre el form no sobre el botón!
-  ev.preventDefault();
-}
-formElement.addEventListener('submit', handleForm);

@@ -26,6 +26,14 @@
   list-style: none;
 }
 
+.js-favorites {
+  list-style: none;
+}
+.js-fabMark {
+border-color: aquamarine;
+border: solid 2px;
+}
+
 /* borders & background-color for further playing purposes */
 
 
