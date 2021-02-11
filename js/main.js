@@ -444,8 +444,8 @@ const favorites = [
     },
   },
 ];
- let fav =[]; // variable para recopilar las favorites
-
+let favs = []; // variable para recopilar las favorites
+const logButtonElement = document.querySelector('.js-form__buttonLog');
 
 //***** api
 
@@ -464,8 +464,9 @@ function paintResultSearch(resultSearch) {
   let htmlCode = '';
   for (const film of resultSearch) {
     /* console.log(film.show.id); */
-    htmlCode += `<li class="js-films" id="${film.show.id}">`;   //incorporo el id para poder trabajar la parte de favoritos
-    htmlCode += `<p>Serie: ${film.show.name}</p>`;              //el name no está en la raiz por eso show.name
+    htmlCode += `<li class="js-films" data-id="${film.show.id}">`; //incorporo el id para poder trabajar la parte de favoritos (incluimos "data-" para poder hacer find después en el proceso de favoritos)
+    htmlCode += `<p>Serie: ${film.show.name}</p>`;
+    htmlCode += `<p>Status: ${film.show.status}</p>`; //el name no está en la raiz por eso show.name
     if (film.show.image === null) {
       // condicional para cuando no tengamos imagen asociada, si es null me muestras imagen dummy
       htmlCode +=
@@ -479,41 +480,76 @@ function paintResultSearch(resultSearch) {
   listenFilmEvents(); //para limpiar/organizar saco la función que escucha el click sobre las películas y la pongo en //listen film events, y aquí solo la llamo
 }
 
-
 //**** paint favorites // este apartado se nutre de una "fake" array
 
-let htmlFavoritesCode = '';
-for (const favorite of favorites) {
-  htmlFavoritesCode += `<li class="js-filmsfab" id="${favorite.show.id}">`;  // el id tiene una clase distinta al de search pq si no se marca al clicarlo
-  htmlFavoritesCode += `<p>Serie: ${favorite.show.name}</p>`;
-  if (favorite.show.image === null) {
-    htmlFavoritesCode += '<p><img src="https://via.placeholder.com/210x295/ffffff/666666/?"/>';
-  } else {
-    htmlFavoritesCode += `<p><img src="${favorite.show.image.medium}"/></p>`;
+// let htmlFavoritesCode = '';
+// for (const favorite of favorites) {
+//   htmlFavoritesCode += `<li class="js-filmsfab" id="${favorite.show.id}">`;  // el id tiene una clase distinta al de search pq si no se marca al clicarlo
+//   htmlFavoritesCode += `<p>Serie: ${favorite.show.name}</p>`;
+//   if (favorite.show.image === null) {
+//     htmlFavoritesCode += '<p><img src="https://via.placeholder.com/210x295/ffffff/666666/?"/>';
+//   } else {
+//     htmlFavoritesCode += `<p><img src="${favorite.show.image.medium}"/></p>`;
+//   }
+//   htmlFavoritesCode += `</li>`;
+// }
+// favoritesElement.innerHTML = htmlFavoritesCode;
+
+function paintFavorites() {
+  let htmlFavoritesCode = '';
+  for (const fav of favs) {
+    htmlFavoritesCode += `<li class="js-filmsfab" id="${fav.show.id}">`; // el id tiene una clase distinta al de search pq si no se marca al clicarlo
+    htmlFavoritesCode += `<p>Serie: ${fav.show.name}</p>`;
+    if (fav.show.image === null) {
+      htmlFavoritesCode +=
+        '<p><img src="https://via.placeholder.com/210x295/ffffff/666666/?"/>';
+    } else {
+      htmlFavoritesCode += `<p><img src="${fav.show.image.medium}"/></p>`;
+    }
+    htmlFavoritesCode += `</li>`;
   }
-  htmlFavoritesCode += `</li>`;
+  favoritesElement.innerHTML = htmlFavoritesCode;
 }
-favoritesElement.innerHTML = htmlFavoritesCode;
+//***** listen film events + add/remove class
 
+// function handleFilm(ev) {
+//   if (ev.currentTarget.classList.contains('js-fabMark')) {
+//     ev.currentTarget.classList.remove('js-fabMark');
+//   }
+//     else {
+//     ev.currentTarget.classList.add('js-fabMark');
+//     }
+//   }
 
-
+// function listenFilmEvents() {
+//   //listen films click (se hace "dentro del pintado" pq la ejecutamos tras el mismo)
+//   const filmsElement = document.querySelectorAll('.js-films');
+//   for (const filmElement of filmsElement) {
+//     filmElement.addEventListener('click', handleFilm);
+//   }
+// }
 
 //***** listen film events + add/remove class
 
-function handleFilm(ev) {
-  if (ev.currentTarget.classList.contains('js-fabMark')) { 
-    ev.currentTarget.classList.remove('js-fabMark');
+function handleAddFilmToFavorites(ev) {
+  const selectedFilmId = parseInt(ev.currentTarget.dataset.id); //obtener id de la peli que la usuaria clica
+  console.log(selectedFilmId, 'id del film seleccionado');
+  // busco si el id obtenido está en el array de favoritos (favs)
+  const FilmFound = favs.findIndex(favs.show.id === selectedFilmId);
+  if (FilmFound === -1) {
+    favs.push(selectedFilmId);
+  } else {
+    const noFavorite = favs.splice(FilmFound, 1);
   }
-    else {
-    ev.currentTarget.classList.add('js-fabMark');
-    }
-  }
+}
+
+// const selectedFilmIdPosition = fav.findIndex(fav function)
 
 function listenFilmEvents() {
   //listen films click (se hace "dentro del pintado" pq la ejecutamos tras el mismo)
   const filmsElement = document.querySelectorAll('.js-films');
   for (const filmElement of filmsElement) {
-    filmElement.addEventListener('click', handleFilm);
+    filmElement.addEventListener('click', handleAddFilmToFavorites);
   }
 }
 
@@ -524,7 +560,6 @@ function listenFilmEvents() {
 //if findIndex(ID) ===-1  ---> push en favArray
 //
 //else ---> splice() indicando posición devuelta por IndexOf, y borrar 1 elemento
-
 
 //***** search
 
@@ -541,5 +576,14 @@ function handleForm(ev) {
 }
 formElement.addEventListener('submit', handleForm);
 
+//botón log
 
+//handle
+function handleLogButton() {
+  for (const favorite of favorites) {
+    console.log(favorite.show.name);
+  }
+}
 
+//listner
+logButtonElement.addEventListener('click', handleLogButton);
