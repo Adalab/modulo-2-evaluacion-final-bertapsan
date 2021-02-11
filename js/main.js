@@ -445,6 +445,7 @@ const favorites = [
   },
 ];
 let favs = []; // variable para recopilar las favorites
+let series = []; // variable para meter los datos reco del api (name, id, image, status)
 const logButtonElement = document.querySelector('.js-form__buttonLog');
 
 //***** api
@@ -463,6 +464,12 @@ function callToApi() {
 function paintResultSearch(resultSearch) {
   let htmlCode = '';
   for (const film of resultSearch) {
+    series.push({                     //creo constante global(series) solo con los datos que vamos a necesitar 
+      name: film.show.name,
+      id: film.show.id,
+      status: film.show.status,
+      image: film.show.image,
+    });
     /* console.log(film.show.id); */
     htmlCode += `<li class="js-films" data-id="${film.show.id}">`; //incorporo el id para poder trabajar la parte de favoritos (incluimos "data-" para poder hacer find después en el proceso de favoritos)
     htmlCode += `<p>Serie: ${film.show.name}</p>`;
@@ -476,74 +483,51 @@ function paintResultSearch(resultSearch) {
     }
     htmlCode += '</li>';
   }
+  console.log(series);
   showsElement.innerHTML = htmlCode;
   listenFilmEvents(); //para limpiar/organizar saco la función que escucha el click sobre las películas y la pongo en //listen film events, y aquí solo la llamo
 }
 
-//**** paint favorites // este apartado se nutre de una "fake" array
-
-// let htmlFavoritesCode = '';
-// for (const favorite of favorites) {
-//   htmlFavoritesCode += `<li class="js-filmsfab" id="${favorite.show.id}">`;  // el id tiene una clase distinta al de search pq si no se marca al clicarlo
-//   htmlFavoritesCode += `<p>Serie: ${favorite.show.name}</p>`;
-//   if (favorite.show.image === null) {
-//     htmlFavoritesCode += '<p><img src="https://via.placeholder.com/210x295/ffffff/666666/?"/>';
-//   } else {
-//     htmlFavoritesCode += `<p><img src="${favorite.show.image.medium}"/></p>`;
-//   }
-//   htmlFavoritesCode += `</li>`;
-// }
-// favoritesElement.innerHTML = htmlFavoritesCode;
+//**** paint favorites //
 
 function paintFavorites() {
   let htmlFavoritesCode = '';
   for (const fav of favs) {
-    htmlFavoritesCode += `<li class="js-filmsfab" id="${fav.show.id}">`; // el id tiene una clase distinta al de search pq si no se marca al clicarlo
-    htmlFavoritesCode += `<p>Serie: ${fav.show.name}</p>`;
-    if (fav.show.image === null) {
+    htmlFavoritesCode += `<li class="js-filmsfab" id="${fav.id}">`; // el id tiene una clase distinta al de search pq si no se marca al clicarlo
+    htmlFavoritesCode += `<p>Serie: ${fav.name}</p>`;
+    if (fav.image === null) {
       htmlFavoritesCode +=
         '<p><img src="https://via.placeholder.com/210x295/ffffff/666666/?"/>';
     } else {
-      htmlFavoritesCode += `<p><img src="${fav.show.image.medium}"/></p>`;
+      htmlFavoritesCode += `<p><img src="${fav.image.medium}"/></p>`;
     }
     htmlFavoritesCode += `</li>`;
   }
   favoritesElement.innerHTML = htmlFavoritesCode;
 }
-//***** listen film events + add/remove class
+paintFavorites();
 
-// function handleFilm(ev) {
-//   if (ev.currentTarget.classList.contains('js-fabMark')) {
-//     ev.currentTarget.classList.remove('js-fabMark');
-//   }
-//     else {
-//     ev.currentTarget.classList.add('js-fabMark');
-//     }
-//   }
 
-// function listenFilmEvents() {
-//   //listen films click (se hace "dentro del pintado" pq la ejecutamos tras el mismo)
-//   const filmsElement = document.querySelectorAll('.js-films');
-//   for (const filmElement of filmsElement) {
-//     filmElement.addEventListener('click', handleFilm);
-//   }
-// }
-
-//***** listen film events + add/remove class
+//***** listen film events + add/remove to favorite
 
 function handleAddFilmToFavorites(ev) {
   const selectedFilmId = parseInt(ev.currentTarget.dataset.id); //obtener id de la peli que la usuaria clica
   console.log(selectedFilmId, 'id del film seleccionado');
   // busco si el id obtenido está en el array de favoritos (favs)
-  const FilmFound = favs.findIndex(favs.show.id === selectedFilmId);
-  if (FilmFound === -1) {
-    favs.push(selectedFilmId);
+  const filmFound = favs.findIndex((fav) => fav.id === selectedFilmId);
+  console.log(filmFound);
+  // búscame en el array de series ese id
+  const filmObject = series.find((serie) => serie.id === selectedFilmId);
+  console.log(filmObject);
+  //condicional
+  if (filmFound === -1) {
+    favs.push(filmObject);
   } else {
-    const noFavorite = favs.splice(FilmFound, 1);
+    favs.splice(filmFound, 1);
   }
+  paintFavorites();
 }
 
-// const selectedFilmIdPosition = fav.findIndex(fav function)
 
 function listenFilmEvents() {
   //listen films click (se hace "dentro del pintado" pq la ejecutamos tras el mismo)
@@ -553,13 +537,6 @@ function listenFilmEvents() {
   }
 }
 
-//**** add/remove to favArray
-// FindIndex() para buscar el elemnto dentro de la fav (array de favorites)
-//let fav = [];
-//
-//if findIndex(ID) ===-1  ---> push en favArray
-//
-//else ---> splice() indicando posición devuelta por IndexOf, y borrar 1 elemento
 
 //***** search
 
